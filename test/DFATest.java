@@ -1,11 +1,9 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -36,15 +34,21 @@ public class DFATest {
 
     @Test
     public void DFA_should_give_true_when_given_string_pass() {
-        args.put("finalState", q3);
+        Set<State> finalStates = new HashSet<>();
+        finalStates.add(q3);
+        args.put("finalStates", finalStates);
         DFA dfa = DFA.create(args);
-        assertTrue(dfa.processInstructions());
+        dfa.processInstructions();
+        assertTrue(dfa.isFinalState());
     }
 
     @Test
     public void DFA_should_give_false_when_given_string_fails() {
-        args.put("finalState", q2);
+        Set<State> finalStates = new HashSet<>();
+        finalStates.add(q2);
+        args.put("finalStates", finalStates);
         DFA dfa = DFA.create(args);
-        assertFalse(dfa.processInstructions());
+        dfa.processInstructions();
+        assertFalse(dfa.isFinalState());
     }
 }
