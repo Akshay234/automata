@@ -18,6 +18,4 @@ public class TransitionTest {
         State nextState = transition.process(q1, '1');
         assertEquals(q2, nextState);
     }
-
-
 }
