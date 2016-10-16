@@ -7,48 +7,47 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class DFATest {
+public class DfaTest {
+    private final String NAME = "name";
+    private final String INITIAL_STATE = "initialState";
+    private final String FINAL_STATES = "finalStates";
+    private final String TRANSITION = "transition";
     Map<String, Object> args;
-    State q1;
-    State q2;
-    State q3;
 
     @Before
     public void setUp() throws Exception {
         args = new HashMap<>();
-        q1 = new State("q1");
-        q2 = new State("q2");
-        q3 = new State("q3");
-        List<Character> instructions = new ArrayList<>();
-        instructions.add('0');
-        instructions.add('1');
-        instructions.add('0');
-        args.put("instructions", instructions);
-        args.put("initialState", q1);
-        Map<String, State> stateMappingWithInstruction = new HashMap<>();
-        stateMappingWithInstruction.put("q1 0", q1);
-        stateMappingWithInstruction.put("q1 1", q2);
-        stateMappingWithInstruction.put("q2 0", q3);
-        args.put("transition", new Transition(stateMappingWithInstruction));
-    }
-
-    @Test
-    public void DFA_should_give_true_when_given_string_pass() {
+        State q1 = new State("q1");
+        State q2 = new State("q2");
+        State q3 = new State("q3");
+        String name = "String end with 01";
+        Map<String, State> transitionsDetail = new HashMap<>();
+        transitionsDetail.put("q1 0", q2);
+        transitionsDetail.put("q1 1", q1);
+        transitionsDetail.put("q2 0", q2);
+        transitionsDetail.put("q2 1", q3);
+        transitionsDetail.put("q3 0", q2);
+        transitionsDetail.put("q3 1", q1);
         Set<State> finalStates = new HashSet<>();
         finalStates.add(q3);
-        args.put("finalStates", finalStates);
-        DFA dfa = DFA.create(args);
-        dfa.processInstructions();
-        assertTrue(dfa.isFinalState());
+
+        args.put(NAME, name);
+        args.put(INITIAL_STATE, q1);
+        args.put(FINAL_STATES, finalStates);
+        args.put(TRANSITION, new Transition(transitionsDetail));
     }
 
     @Test
-    public void DFA_should_give_false_when_given_string_fails() {
-        Set<State> finalStates = new HashSet<>();
-        finalStates.add(q2);
-        args.put("finalStates", finalStates);
-        DFA dfa = DFA.create(args);
-        dfa.processInstructions();
-        assertFalse(dfa.isFinalState());
+    public void Dfa_should_be_able_to_process_when_valid_instructions_are_given() {
+        String instructions = "101";
+        Dfa dfa = Dfa.create(args);
+        assertTrue(dfa.process(instructions));
+    }
+
+    @Test
+    public void Dfa_should_not_be_able_to_process_when_invalid_instructions_are_given() {
+        String instructions = "010";
+        Dfa dfa = Dfa.create(args);
+        assertFalse(dfa.process(instructions));
     }
 }

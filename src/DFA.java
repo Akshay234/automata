@@ -1,39 +1,42 @@
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class DFA {
-
-    private final List<Character> instructions;
+public class Dfa {
+    private static final String NAME = "name";
+    private static final String INITIAL_STATE = "initialState";
+    private static final String FINAL_STATES = "finalStates";
+    private static final String TRANSITION = "transition";
+    private String name;
     private State currentState;
     private final Set<State> finalStates;
     private final Transition transition;
 
-    private DFA(List<Character> instructions, State currentState, Set<State> finalStates, Transition transition) {
-        this.instructions = instructions;
+    private Dfa(String name, Set<State> finalStates, Transition transition, State currentState) {
+        this.name = name;
         this.currentState = currentState;
         this.finalStates = finalStates;
         this.transition = transition;
     }
 
-    public static DFA create(Map<String, Object> args) {
-        List<Character> instructions = (List<Character>) args.get("instructions");
-        State initialState = (State) args.get("initialState");
-        Set<State> finalStates = (Set<State>) args.get("finalStates");
-        Transition transition = (Transition) args.get("transition");
+    public static Dfa create(Map<String, Object> args) {
+        String name = (String) args.get(NAME);
+        State initialState = (State) args.get(INITIAL_STATE);
+        Set<State> finalStates = (Set<State>) args.get(FINAL_STATES);
+        Transition transition = (Transition) args.get(TRANSITION);
 
-        return new DFA(instructions, initialState, finalStates, transition);
+        return new Dfa(name, finalStates, transition, initialState);
     }
 
-    public void processInstructions() {
-        for (int i = 0; i < instructions.size(); i++) {
-            currentState = transition.process(currentState, instructions.get(i));
+    public boolean process(String instructions) {
+        for (int i = 0; i < instructions.length(); i++) {
+            currentState = transition.process(currentState, instructions.charAt(i));
         }
+        return isFinalState();
     }
 
-    public boolean isFinalState(){
-        boolean isObtained = false;
+    private boolean isFinalState(){
+        boolean isObtained = true;
         Iterator<State> listOfFinalStates = finalStates.iterator();
         while (listOfFinalStates.hasNext()){
             isObtained = currentState.equals(listOfFinalStates.next());
