@@ -25,7 +25,7 @@ public class FileParserTest {
     public void setUp() throws Exception {
         file = new File(VALID_FILE);
         file.createNewFile();
-        String data = "[{\"name\":\"foobar\",\"type\":\"Nothing\"}]";
+        String data = "\"[{\"name\":\"foobar\",\"type\":\"Nothing\"}]\"";
         writeStringToFile(file, data);
     }
 

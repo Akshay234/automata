@@ -15,7 +15,7 @@ public class FileParser {
 
     public JSONArray parse() throws IOException, JSONException {
         File file = new File(filePath);
-        String fileData = FileUtils.readFileToString(file);
+        String fileData = FileUtils.readFileToString(file).replace("\\","").replaceFirst("\"","");
         JSONArray data = new JSONArray(fileData);
 
         return data;

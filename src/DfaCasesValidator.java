@@ -16,7 +16,7 @@ public class DfaCasesValidator implements Validator {
         JSONArray passCases = data.getJSONArray("pass-cases");
         Dfa dfa = createDfa();
         for (int i = 0; i < passCases.length(); i++) {
-            if (!dfa.process((String) passCases.get(i))) {
+            if (!dfa.process(passCases.get(i).toString())) {
                 return false;
             }
         }
@@ -28,7 +28,7 @@ public class DfaCasesValidator implements Validator {
         JSONArray failCases = data.getJSONArray("fail-cases");
         Dfa dfa = createDfa();
         for (int i = 0; i < failCases.length(); i++) {
-            if (dfa.process((String) failCases.get(i))) {
+            if (dfa.process(failCases.get(i).toString())) {
                 return false;
             }
         }
