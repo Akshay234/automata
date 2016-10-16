@@ -7,14 +7,16 @@ public class Dfa {
     private static final String INITIAL_STATE = "initialState";
     private static final String FINAL_STATES = "finalStates";
     private static final String TRANSITION = "transition";
+    private final State initialState;
     private String name;
     private State currentState;
     private final Set<State> finalStates;
     private final Transition transition;
 
-    private Dfa(String name, Set<State> finalStates, Transition transition, State currentState) {
+    private Dfa(String name, Set<State> finalStates, Transition transition, State initialState) {
         this.name = name;
-        this.currentState = currentState;
+        this.initialState = initialState;
+        this.currentState = initialState;
         this.finalStates = finalStates;
         this.transition = transition;
     }
@@ -29,6 +31,7 @@ public class Dfa {
     }
 
     public boolean process(String instructions) {
+        currentState = initialState;
         for (int i = 0; i < instructions.length(); i++) {
             currentState = transition.process(currentState, instructions.charAt(i));
         }
@@ -36,11 +39,12 @@ public class Dfa {
     }
 
     private boolean isFinalState(){
-        boolean isObtained = true;
         Iterator<State> listOfFinalStates = finalStates.iterator();
         while (listOfFinalStates.hasNext()){
-            isObtained = currentState.equals(listOfFinalStates.next());
+            if(currentState.equals(listOfFinalStates.next())){
+                return true;
+            }
         }
-        return isObtained;
+        return false;
     }
 }
